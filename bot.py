@@ -1,15 +1,18 @@
+import os
+import requests
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
-import requests
 
-# Thay token bot của bạn vào đây
-TOKEN = "8461221380:AAGS6Pi0wEcEoiRi6ZxvvYcqVVViTmqyosA"
+# Lấy token từ biến môi trường
+TOKEN = os.getenv("TOKEN")
 
 API_URL = "https://free-like-api-aditya-ffm.vercel.app/like"
 
 # Lệnh /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Xin chào! Gõ /like uid server_name để sử dụng bot 🚀")
+    await update.message.reply_text(
+        "Xin chào! Gõ /like uid server_name để dùng bot.\nVí dụ: /like 123456 VN"
+    )
 
 # Lệnh /like uid server_name
 async def like(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -30,13 +33,13 @@ async def like(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if response.status_code == 200:
             data = response.json()
-            await update.message.reply_text(f"✅ Thành công:\n{data}")
+            await update.message.reply_text(f"✅ Thành công!\nDữ liệu: {data}")
         else:
             await update.message.reply_text("❌ Lỗi khi gọi API!")
     except Exception as e:
         await update.message.reply_text(f"⚠️ Lỗi: {e}")
 
-# Khởi chạy bot
+# Chạy bot
 def main():
     app = Application.builder().token(TOKEN).build()
 
@@ -48,4 +51,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-              
